@@ -1,18 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ComputerController } from './computer.controller';
+import { Controller, Get } from '@nestjs/common';
+import { CpuService } from '../cpu/cpu.service';
+import { DiskService } from '../disk/disk.service';
 
-describe('ComputerController', () => {
-  let controller: ComputerController;
+@Controller('computer')
+export class ComputerController {
+  constructor(
+    private cpuService: CpuService,
+    private diskService: DiskService,
+  ) {}
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [ComputerController],
-    }).compile();
-
-    controller = module.get<ComputerController>(ComputerController);
-  });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+  @Get()
+  run() {
+    return [this.cpuService.compute(1, 2), this.diskService.getData()];
+  }
+}
