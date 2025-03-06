@@ -1,9 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
 @Injectable()
 export class PowerService {
+  private powerMultiplier: number;
+
+  constructor(
+    @Inject('POWER_OPTIONS') private powerOptions: { powerMode: string },
+  ) {
+    switch (powerOptions.powerMode) {
+      case 'low':
+        this.powerMultiplier = 0.5;
+        break;
+      case 'high':
+        this.powerMultiplier = 2;
+        break;
+      default:
+        this.powerMultiplier = 1;
+    }
+  }
+
   supplyPower(watts: number) {
-    console.log(`Supplying ${watts} watts of power`);
-    return watts;
+    const actualWatts = watts * this.powerMultiplier;
+    console.log(
+      `Supplying ${actualWatts} watts of power (${this.powerOptions.powerMode} mode)`,
+    );
+    return actualWatts;
   }
 }

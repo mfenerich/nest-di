@@ -1,8 +1,21 @@
-import { Module } from '@nestjs/common';
+import { Module, DynamicModule } from '@nestjs/common';
 import { PowerService } from './power.service';
 
-@Module({
-  providers: [PowerService],
-  exports: [PowerService], // This makes PowerService available to other modules
-})
-export class PowerModule {}
+@Module({})
+export class PowerModule {
+  static register(
+    options: { powerMode: string } = { powerMode: 'normal' },
+  ): DynamicModule {
+    return {
+      module: PowerModule,
+      providers: [
+        {
+          provide: 'POWER_OPTIONS',
+          useValue: options,
+        },
+        PowerService,
+      ],
+      exports: [PowerService],
+    };
+  }
+}

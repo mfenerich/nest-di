@@ -3,7 +3,9 @@ import { DiskService } from './disk.service';
 import { PowerModule } from '../power/power.module';
 
 @Module({
-  imports: [PowerModule],
+  imports: [
+    PowerModule.register({ powerMode: 'low' }), // Disk uses low power mode to save energy
+  ],
   providers: [DiskService],
   exports: [DiskService],
 })

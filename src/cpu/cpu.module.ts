@@ -3,8 +3,10 @@ import { CpuService } from './cpu.service';
 import { PowerModule } from '../power/power.module';
 
 @Module({
-  imports: [PowerModule], // This gives access to exported providers from PowerModule
+  imports: [
+    PowerModule.register({ powerMode: 'high' }), // CPU needs high performance
+  ],
   providers: [CpuService],
-  exports: [CpuService], // Making CpuService available to other modules
+  exports: [CpuService],
 })
 export class CpuModule {}
